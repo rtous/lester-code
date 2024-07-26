@@ -51,17 +51,7 @@ Demo code can be find [here](https://colab.research.google.com/drive/1Xg76Uz8h4e
 	cd -
 
 	#other libraries
-	pip install torch==2.3.1
-	pip install torchvision==0.18.1
-	pip install numpy==1.26.0
-	pip install shapely==2.0.2
-	pip install opencv-python==3.4.17.61
-	pip install pycocotools==2.0.8
-	pip install matplotlib==3.9.1
-	pip install Pillow==10.4.0
-	pip install scikit-image==0.24.0
-	pip install setuptools
-	pip install gdown
+	pip install torch==2.3.1 torchvision==0.18.1 numpy==1.26.0 shapely==2.0.2 opencv-python==3.4.17.61 pycocotools==2.0.8 matplotlib==3.9.1 Pillow==10.4.0 scikit-image==0.24.0 setuptools gdown
 
 	#Install GroundingDINO
 	#NOTE: The code searches some config files (that are within the src dire of the the venv dir) in the repo. Thus, I've copied them to a src dir in the repo root.  
