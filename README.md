@@ -81,8 +81,13 @@ Demo code can be find [here](https://colab.research.google.com/drive/1Xg76Uz8h4e
 	mkdir ./data/scenes/test/imagesFull
 	ffmpeg -i data/scenes/test/footage.mp4 -r 25 'data/scenes/test/imagesFull/%03d.png'
 
+	#segmentation
 	python segment.py test "[\"skin\",\"hair,shoes,tshirt,shorts\"]"
 
+	#simplification and finishing
+	python lowpoly_last.py data/scenes/test 0 5
+
+	./pngfinal2video.sh data/scenes/{scene}
 
 <!-- 
 
