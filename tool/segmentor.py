@@ -71,7 +71,8 @@ class Segmentor:
         masks, scores, logits = self.interactive_predict(prompts, 'point_mask', multimask)
         mask = masks[np.argmax(scores)]
 
-        return mask.astype(np.uint8)
+        #return mask.astype(np.uint8) 
+        return [mask] #RUBEN
 
     def segment_with_box(self, origin_frame, bbox, reset_image=False):
         if reset_image:

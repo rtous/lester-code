@@ -87,11 +87,16 @@ Demo code can be find [here](https://colab.research.google.com/drive/1Xg76Uz8h4e
 	#simplification and finishing
 	python lowpoly_last.py data/scenes/test 0 5
 
-	./pngfinal2video.sh data/scenes/{scene}
+	./pngfinal2video.sh data/scenes/test
 
 <!-- 
 
-TODO: freeze 2 repos, checkpoints, package versions
+TODO: 
+	- checkpoints (1/2)
+	- package versions (1/2)
+
+	- API: coordinate endpoint (no GroundingDINO)
+	- refactoring
 
 -->
 

@@ -215,6 +215,62 @@ class SegTracker():
         refined_merged_mask[interactive_mask > 0] = self.curr_idx
 
         return refined_merged_mask
+
+    def detect_and_seg_v2(self, origin_frame: np.ndarray, grounding_caption, box_threshold, text_threshold, box_size_threshold=1, reset_image=False):
+        '''
+        Using Grounding-DINO to detect object acc Text-prompts
+        Retrun:
+            refined_merged_mask: numpy array (h, w)
+            annotated_frame: numpy array (h, w, 3)
+        '''
+        # backup id and origin-merged-mask
+        bc_id = self.curr_idx
+        bc_mask = self.origin_merged_mask
+
+        # get annotated_frame and boxes
+        annotated_frame, boxes = self.detector.run_grounding(origin_frame, grounding_caption, box_threshold, text_threshold)
+        for i in range(len(boxes)):
+            bbox = boxes[i]
+            if (bbox[1][0] - bbox[0][0]) * (bbox[1][1] - bbox[0][1]) > annotated_frame.shape[0] * annotated_frame.shape[1] * box_size_threshold:
+                continue
+            #interactive_mask = self.sam.segment_with_box(origin_frame, bbox, reset_image)[0]
+            #https://github.com/facebookresearch/segment-anything/blob/main/notebooks/predictor_example.ipynb
+            #input_point = np.array([[500, 375], [1125, 625]])
+            #coords = input_point
+            #modes = np.array([1],[1])# None #np.array(['point']) #point_labels
+            #modes = np.array([2])
+            #from https://github.com/facebookresearch/segment-anything/blob/main/notebooks/predictor_example.ipynb
+            #Points are input to the model in (x,y) format and come with labels 1 (foreground point) or 0 (background point). Multiple points can be input; here we use only one.
+            
+            #input_point = np.array([[500, 375]])
+            #input_label = np.array([1])
+
+            #input_point = np.array([[108, 192]])
+            input_label = np.array([1])
+            #input_point = np.array([[184,88]])#hair
+            input_point = np.array([[176,306]])#pants
+            
+
+            #input_point = np.array([[194, 113]])
+            #input_point = np.array([[184,88], [176,306]])
+            #input_label = np.array([1,1])
+
+            #input_point = np.array([[500, 375], [108, 192], [75, 200]])
+            #input_label = np.array([1, 1, 1])
+            coords = input_point
+            modes = input_label
+            interactive_mask = self.sam.segment_with_click(origin_frame, coords, modes, multimask=True)[0]
+            print("interactive_mask shape:")
+            print(interactive_mask.shape)
+
+            refined_merged_mask = self.add_mask(interactive_mask)
+            self.update_origin_merged_mask(refined_merged_mask)
+            self.curr_idx += 1
+
+        # reset origin_mask
+        self.reset_origin_merged_mask(bc_mask, bc_id)
+
+        return refined_merged_mask, annotated_frame
     
     def detect_and_seg(self, origin_frame: np.ndarray, grounding_caption, box_threshold, text_threshold, box_size_threshold=1, reset_image=False):
         '''
